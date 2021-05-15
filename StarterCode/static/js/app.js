@@ -17,8 +17,9 @@ d3.json('samples.json').then(function(data) {
     console.log("These are all the samples:",samples);
     var trace1 = {
         x: data.samples[0].sample_values.slice(0,10).reverse(),
+        y: ["OTU 1167", "OTU 2859", "OTU 482", "OTU 2264", "OTU 41", "OTU 1189", "OTU 352", "1OTU 89", "OTU 2318", "OTU 1977"].reverse(),
         // y: ['a','b','c','d','e','f','g','h','i','j'].sort((a, b) => {b-a}),
-        y: labels.reverse(),
+        // y: labels.reverse(),
         text: data.samples[0].otu_labels,
         type: 'bar',
         orientation: 'h'
