@@ -6,12 +6,14 @@ d3.json('samples.json').then(function(data) {
     console.log(data);
     // first set of otu_ids
     console.log("This is the list of OTU ids:",data.samples[0].otu_ids.slice(0,10));
+    // revers sort of otu_ids
+    console.log(data.samples[0].otu_ids.slice(0,10).reverse())
     // third set of sample_values
-    console.log("This is the list of sample values:",data.samples[0].sample_values.slice(0,10))
+    console.log("This is the list of sample values:",data.samples[3].sample_values.slice(0,10))
     var samples = data.samples.slice(0,10);
     console.log("These are all the samples:",samples);
     var trace1 = {
-        x: data.samples[0].sample_values.slice(0,10).sort((a, b) => {b-a}),
+        x: data.samples[0].sample_values.slice(0,10).reverse(),
         y: ['a','b','c','d','e','f','g','h','i','j'].sort((a, b) => {b-a}),
         // y: data.samples[0].otu_ids.slice(0,10),
         text: data.samples[0].otu_labels,
