@@ -6,7 +6,6 @@ d3.json('samples.json').then(function(data) {
     console.log(data);
     // first set of otu_ids
     console.log("This is the list of OTU ids:",data.samples[0].otu_ids.slice(0,10));
-    console.log("this is data.names: ", data.names)
     var otu_ids = data.samples[0].otu_ids;
     var labels = otu_ids.map(String);
     var droplist = data.names;
@@ -48,7 +47,7 @@ d3.json('samples.json').then(function(data) {
 
     const menu = d3.select("#selDataset");
     droplist.forEach(item => {
-        console.log(item);
+        // console.log(item);
         menu.append("option").text(item);
     })
 
@@ -59,10 +58,14 @@ function menuBuilder(arr) {
     
 }
 
+console.log(d3.select("#selDataset"));
 // handle menu change
-d3.select("button").on("click", function() {
+d3.select("#selDataset").on("change", function() {
     let el = this;
     console.log(el);
+    let id = d3.select(this).attr("id");
+    
+    console.log(id, d3.event.target.value);
 });
 // build test chart (works but not top 10)
 // https://www.tutorialspoint.com/top-n-max-value-from-array-of-object-javascript
