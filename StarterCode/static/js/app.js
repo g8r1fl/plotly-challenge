@@ -6,9 +6,11 @@ d3.json('samples.json').then(function(data) {
     console.log(data);
     // first set of otu_ids
     console.log("This is the list of OTU ids:",data.samples[0].otu_ids.slice(0,10));
+    console.log("this is data.names: ", data.names)
     var otu_ids = data.samples[0].otu_ids;
     var labels = otu_ids.map(String);
-    var names = data.samples.names;
+    var droplist = data.names;
+    console.log("This is the list of names: ", droplist);
     console.log("This is the list of my labels: ", labels);
     // revers sort of otu_ids
     console.log("This is the list of OTU ids descending: ", data.samples[0].otu_ids.slice(0,10).reverse())
@@ -42,8 +44,11 @@ d3.json('samples.json').then(function(data) {
 
     Plotly.newPlot('bubble', data2);
 
+    
+
     const menu = d3.select("#selDataset");
-    names.forEach(item => {
+    droplist.forEach(item => {
+        console.log(item);
         menu.append("option").text(item);
     })
 
