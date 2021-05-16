@@ -6,14 +6,15 @@ d3.json('samples.json').then(function(data) {
     console.log(data);
     // first set of otu_ids
     console.log("This is the list of OTU ids:",data.samples[0].otu_ids.slice(0,10));
-    var otu_ids = data.samples[0].otu_ids.slice(0,10);
+    var otu_ids = data.samples[0].otu_ids;
     var labels = otu_ids.map(String);
+    var names = data.samples.names;
     console.log("This is the list of my labels: ", labels);
     // revers sort of otu_ids
     console.log("This is the list of OTU ids descending: ", data.samples[0].otu_ids.slice(0,10).reverse())
     // third set of sample_values
     console.log("This is the list of sample values:",data.samples[3].sample_values.slice(0,10))
-    var samples = data.samples.slice(0,10);
+    var samples = data.samples[0].sample_values;
     console.log("These are all the samples:",samples);
     var trace1 = {
         x: data.samples[0].sample_values.slice(0,10).reverse(),
@@ -27,8 +28,37 @@ d3.json('samples.json').then(function(data) {
 
     var data = [trace1]
     Plotly.newPlot('bar', data);
+
+    // build bubble chart
+    var trace2 = {
+        x: otu_ids,
+        y: samples,
+        mode: 'markers',
+        marker: {
+            size: samples
+        }
+    };
+    var data2 = [trace2]
+
+    Plotly.newPlot('bubble', data2);
+
+    const menu = d3.select("#selDataset");
+    names.forEach(item => {
+        menu.append("option").text(item);
+    })
+
 });
 
+// add dropdown options to html
+function menuBuilder(arr) {
+    
+}
+
+// handle menu change
+d3.select("button").on("click", function() {
+    let el = this;
+    console.log(el);
+});
 // build test chart (works but not top 10)
 // https://www.tutorialspoint.com/top-n-max-value-from-array-of-object-javascript
 // for sorting: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
