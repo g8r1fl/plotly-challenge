@@ -35,6 +35,7 @@ d3.json('samples.json').then(function(data) {
         x: otu_ids,
         y: samples,
         mode: 'markers',
+        // text: data.samples[0].otu_labels,
         marker: {
             size: samples
         }
@@ -48,7 +49,7 @@ d3.json('samples.json').then(function(data) {
     const menu = d3.select("#selDataset");
     droplist.forEach(item => {
         // console.log(item);
-        menu.append("option").text(item);
+        menu.append("option").attr("value", item).text(item);
     })
 
 });
@@ -65,8 +66,13 @@ d3.select("#selDataset").on("change", function() {
     console.log(el);
     let id = d3.select(this).attr("id");
     
-    console.log(id, d3.event.target.value);
+    console.log(id, d3.event.target.value, this.value);
 });
+
+
+function filterId(id) {
+
+}
 // build test chart (works but not top 10)
 // https://www.tutorialspoint.com/top-n-max-value-from-array-of-object-javascript
 // for sorting: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
