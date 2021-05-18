@@ -70,6 +70,7 @@ d3.json('samples.json').then(data => {
     Object.keys(demographic).forEach((k, v) => {
         // meta.append("p").attr("class", "card-text").text(d3.keys(elem));
         console.log(k,v);
+        meta.append("p").attr("class", "card-text").text(v);
     })
 
     // menu.on("change", () => 
