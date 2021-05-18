@@ -70,7 +70,7 @@ d3.select("#selDataset").on("change", function() {
 });
 
 
-function filterId(id) {
+function filterId() {
 
 }
 // build test chart (works but not top 10)

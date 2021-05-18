@@ -29,7 +29,7 @@ d3.json('samples.json').then(data => {
     let x_bar = sample[0].sample_values.slice(0,10);
     console.log(x_bar);
     let droplist = data.names;
-    let demographic = data.metadata[0];
+    var demographic = data.metadata[0];
     console.log(d3.keys(demographic));
     
     // build initial hbar plot
@@ -65,10 +65,11 @@ d3.json('samples.json').then(data => {
     })
 
     // build metadata card
+    
     const meta = d3.select("#sample-metadata");
-    demographic.forEach((elem) => {
+    Object.keys(demographic).forEach((k, v) => {
         // meta.append("p").attr("class", "card-text").text(d3.keys(elem));
-        console.log(d3.keys(elem))
+        console.log(k,v);
     })
 
     // menu.on("change", () => 
