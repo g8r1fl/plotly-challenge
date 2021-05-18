@@ -1,104 +1,67 @@
-// this is from the samples json file that I converted to samples.js for practice
-console.log("This is from my samples.js file",samples);
-
-// read the json data and test that I can read it and manipulate it
-d3.json('samples.json').then(function(data) {
+d3.json('samples.json').then(data => {
     console.log(data);
-    // first set of otu_ids
-    console.log("This is the list of OTU ids:",data.samples[0].otu_ids.slice(0,10));
-    var otu_ids = data.samples[0].otu_ids;
-    var labels = otu_ids.map(String);
-    var droplist = data.names;
-    console.log("This is the list of names: ", droplist);
-    console.log("This is the list of my labels: ", labels);
-    // revers sort of otu_ids
-    console.log("This is the list of OTU ids descending: ", data.samples[0].otu_ids.slice(0,10).reverse())
-    // third set of sample_values
-    console.log("This is the list of sample values:",data.samples[3].sample_values.slice(0,10))
-    var samples = data.samples[0].sample_values;
-    console.log("These are all the samples:",samples);
+    
+    // filter samples to element 940
+    let filtered = data.samples.filter(sample => sample.id === "940");
+    let y = filtered.map(otus => otus.otu_ids);
+    console.log("This is the mapped otu ids for ID #940: ",y[0].slice(0,10));
+    console.log(filtered[0].otu_ids);
+    //  get data for plots
+    let sample = data.samples.filter(sample => sample.id === "940");
+    let x_bubble = sample[0].otu_ids;
+    let y_bubble = sample[0].sample_values;
+    let y_bar = y[0].slice(0,10).map(String);
+    y_bar = y_bar.map(el => "OTU "+el)
+    console.log(y_bar);
+    let x_bar = sample[0].sample_values.slice(0,10);
+    console.log(x_bar);
+    let droplist = data.names;
+    var demographic = data.metadata[0];
+    console.log(d3.keys(demographic));
+    
+    // build initial hbar plot
     var trace1 = {
-        x: data.samples[0].sample_values.slice(0,10).reverse(),
-        y: ["OTU 1167", "OTU 2859", "OTU 482", "OTU 2264", "OTU 41", "OTU 1189", "OTU 352", "1OTU 89", "OTU 2318", "OTU 1977"].reverse(),
-        // y: ['a','b','c','d','e','f','g','h','i','j'].sort((a, b) => {b-a}),
-        // y: labels.reverse(),
-        text: data.samples[0].otu_labels,
+        x: x_bar.reverse(),
+        y: y_bar.reverse(),
         type: 'bar',
         orientation: 'h'
     };
+    
+    var data = [trace1];
 
-    var data = [trace1]
-    Plotly.newPlot('bar', data);
+    Plotly.newPlot("bar", data);
 
-    // build bubble chart
+    // build initial bubble plot
     var trace2 = {
-        x: otu_ids,
-        y: samples,
+        x: x_bubble,
+        y: y_bubble,
         mode: 'markers',
-        // text: data.samples[0].otu_labels,
         marker: {
-            size: samples
+            size: sample[0].sample_values
         }
     };
-    var data2 = [trace2]
-
-    Plotly.newPlot('bubble', data2);
-
     
+    var data2 = [trace2];
 
+    Plotly.newPlot("bubble", data2);
+    // build dropdown list
     const menu = d3.select("#selDataset");
+
     droplist.forEach(item => {
-        // console.log(item);
         menu.append("option").attr("value", item).text(item);
     })
 
+    // build metadata card
+    // got solution here: 
+    // https://stackoverflow.com/questions/37673454/javascript-iterate-key-value-from-json
+    const meta = d3.select("#sample-metadata");
+    Object.keys(demographic).forEach((k) => {
+        // meta.append("p").attr("class", "card-text").text(d3.keys(elem));
+        let info = demographic[k]
+        console.log(k, info );
+        meta.append("p").attr("class", "card-text").text(`${k}: ${demographic[k]}`);
+    })
+
+    // menu.on("change", () => k, demographic[k]
+    // updatePlot(data));
 });
-
-// add dropdown options to html
-function menuBuilder(arr) {
-    
-}
-
-console.log(d3.select("#selDataset"));
-// handle menu change
-d3.select("#selDataset").on("change", function() {
-    let el = this;
-    console.log(el);
-    let id = d3.select(this).attr("id");
-    
-    console.log(id, d3.event.target.value, this.value);
-});
-
-
-function filterId() {
-
-}
-// build test chart (works but not top 10)
-// https://www.tutorialspoint.com/top-n-max-value-from-array-of-object-javascript
-// for sorting: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
-// let sam_vals = samples.samples[0].sample_values.slice(0,10).sort((a,b) => {b-a});
-// let otus = samples.samples[0].otu_ids.slice(0,10)
-// var labels = otus.map(elem => elem.toString());
-// console.log("The top ten otu-id's are", otus);
-// console.log("The top ten sample values are", sam_vals);
-// console.log(labels);
-
-
-
-// var trace1 = {
-//     x: samples.samples[0].sample_values.slice(0,10).sort((a, b) => {b-a}),
-//     y: labels,
-//     // y: samples.samples[0].otu_ids.slice(0,10),
-//     text: samples.samples[0].otu_labels,
-//     type: 'bar',
-//     width: [5,5,5,5,5,5,5,5,5,5],
-//     orientation: 'h'
-// };
-
-// var data = [trace1];
-
-// var layout = {
-//     yaxis: {range: labels.length},
-// };
-
-// Plotly.newPlot("bar", data)

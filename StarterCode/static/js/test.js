@@ -1,26 +1,34 @@
 
 
 
-// updatePlot = (data) => {
-//     let id = d3.event.target.value; //value of dropdown list
-//     let sample = data.samples.filter(sample => sample.id === id);
-//     let x_buble = sample.otu_ids;
-//     let y_bubble = sample.sample_values;
-//     let x_bar = sample.otu_ids.slice(0,10);
-//     let y_bar = sample.sample_values.slice(0,10);
+updatePlot = (data) => {
+    let id = d3.event.target.value; //value of dropdown list
+    d3.json('samples.json').then(data => {
+        console.log(data);
+        let demo = data.metadata.filter(meta => meta.id === 950);
+        console.log(demo);
+    });
+    // let sample = data.samples.filter(sample => sample.id === id);
+    // let x_buble = sample.otu_ids;
+    // let y_bubble = sample.sample_values;
+    // let x_bar = sample.otu_ids.slice(0,10);
+    // let y_bar = sample.sample_values.slice(0,10);
+    
 
-// }
+
+};
 
 d3.json('samples.json').then(data => {
     console.log(data);
-    
+    let id = "941"
     // filter samples to element 940
-    let filtered = data.samples.filter(sample => sample.id === "940");
+    let filtered = data.samples.filter(sample => sample.id === id);
     let y = filtered.map(otus => otus.otu_ids);
+    console.log(filtered);
     console.log("This is the mapped otu ids for ID #940: ",y[0].slice(0,10));
     console.log(filtered[0].otu_ids);
     //  get data for plots
-    let sample = data.samples.filter(sample => sample.id === "940");
+    let sample = data.samples.filter(sample => sample.id === id);
     let x_bubble = sample[0].otu_ids;
     let y_bubble = sample[0].sample_values;
     let y_bar = y[0].slice(0,10).map(String);
@@ -65,16 +73,19 @@ d3.json('samples.json').then(data => {
     })
 
     // build metadata card
-    
+    // got solution here: 
+    // https://stackoverflow.com/questions/37673454/javascript-iterate-key-value-from-json
     const meta = d3.select("#sample-metadata");
-    Object.keys(demographic).forEach((k, v) => {
+    Object.keys(demographic).forEach((k) => {
         // meta.append("p").attr("class", "card-text").text(d3.keys(elem));
-        console.log(k,v);
-        meta.append("p").attr("class", "card-text").text(v);
+        console.log(k, demographic[k]);
+        meta.append("p").attr("class", "card-text").text(`${k}: ${demographic[k]}`);
     })
 
-    // menu.on("change", () => 
-    // updatePlot(data));
+    menu.on("change", () => {
+        updatePlot(data);
+        console.log(d3.event.target.value);
+    });
 });
 
 // function init () {
