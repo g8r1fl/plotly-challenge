@@ -133,7 +133,9 @@ function init() {
             y: y_bubble,
             mode: 'markers',
             marker: {
-                size: sample[0].sample_values
+                size: sample[0].sample_values,
+                color: sample[0].sample_values,
+                colorscale: [[0, 'rgb(0, 0, 0)'], [1, 'rgb(0, 255, 255)']]
             },
             text: sample[0].otu_labels
         };
