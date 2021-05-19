@@ -134,7 +134,8 @@ function init() {
             mode: 'markers',
             marker: {
                 size: sample[0].sample_values
-            }
+            },
+            text: sample[0].otu_labels
         };
         
         var plotdata2 = [trace2];
@@ -161,14 +162,25 @@ function init() {
             console.log(id);
             // console.log(data);
             const filtered = data.samples.filter(sample => sample.id === id);
-            // let x_buble = sample.otu_ids;
-            // let y_bubble = sample.sample_values;
-            // let x_bar = sample.otu_ids.slice(0,10);
-            // let y_bar = sample.sample_values.slice(0,10);
-            let demo = data.metadata.filter(meta => meta.id === id);    
-            console.log(filtered);
-            console.log(data.metadata.filter(meta => meta.id === parseInt(id)));
-              
+            let x_bubble2 = filtered[0].otu_ids;
+            let y_bubble2 = filtered[0].sample_values;
+            // let x_bar = filtered[0].otu_ids.slice(0,10);
+            // let y_bar = filtered[0].sample_values.slice(0,10);
+            let demo = data.metadata.filter(meta => meta.id === parseInt(id));    
+            console.log(x_bubble2);
+            console.log(demo);
+
+            Plotly.restyle('bubble', 'x', [x_bubble2]);
+            Plotly.restyle('bubble', 'y', [y_bubble2]);
+            
+            d3.select("#sample-metadata").html("");
+            const meta = d3.select("#sample-metadata");
+            
+            Object.keys(demo).forEach((k) => {
+                // meta.append("p").attr("class", "card-text").text(d3.keys(elem));
+                console.log(k, demo[k]);
+                meta.append("p").attr("class", "card-text").text(`${k}: ${demo[k]}`);
+            });
             
         }
 
