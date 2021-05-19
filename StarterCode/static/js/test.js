@@ -164,23 +164,35 @@ function init() {
             const filtered = data.samples.filter(sample => sample.id === id);
             let x_bubble2 = filtered[0].otu_ids;
             let y_bubble2 = filtered[0].sample_values;
-            // let x_bar = filtered[0].otu_ids.slice(0,10);
-            // let y_bar = filtered[0].sample_values.slice(0,10);
+            let x_bar = filtered[0].sample_values.slice(0,10);
+            let y_bar = filtered[0].otu_ids.slice(0,10);
+            y_bar = y_bar.map(el => "OTU "+el)
+            console.log(y_bar);
             let demo = data.metadata.filter(meta => meta.id === parseInt(id));    
-            console.log(x_bubble2);
             console.log(demo);
-
+            // update bubble plot with new id info
             Plotly.restyle('bubble', 'x', [x_bubble2]);
             Plotly.restyle('bubble', 'y', [y_bubble2]);
+            // update bar plot with new id info
+            Plotly.restyle('bar', 'x', [x_bar.reverse()]);
+            Plotly.restyle('bar', 'y', [y_bar.reverse()]);
             
-            d3.select("#sample-metadata").html("");
+            // update demographic info card with new id info
+            d3.select("#sample-metadata").selectAll("p").remove();
             const meta = d3.select("#sample-metadata");
             
-            Object.keys(demo).forEach((k) => {
+            Object.keys(demo[0]).forEach((k) => {
                 // meta.append("p").attr("class", "card-text").text(d3.keys(elem));
-                console.log(k, demo[k]);
-                meta.append("p").attr("class", "card-text").text(`${k}: ${demo[k]}`);
+                console.log(`${k}: ${demo[0][k]}`);
+                // d3.select("#sample-metadata").append("p").attr("class", "card-text").text(`${k}: ${demo[k]}`);
+                // d3.select("#sample-metadata").append("p").attr("class", "card-text").text(k);
             });
+
+            for (const [k,v] of Object.entries(demo[0])) {
+                console.log(`${k}: ${v}`);
+                d3.select("#sample-metadata").append("p").attr("class", "card-text").text(`${k}: ${v}`);
+            };
+            
             
         }
 
