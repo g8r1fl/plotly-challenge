@@ -95,7 +95,7 @@
 function init() {
     d3.json('samples.json').then(data => {
         console.log(data);
-        let id = "941"
+        let id = "940"
         // filter samples to element 940
         let filtered = data.samples.filter(sample => sample.id === id);
         let y = filtered.map(otus => otus.otu_ids);
@@ -143,6 +143,24 @@ function init() {
         var plotdata2 = [trace2];
     
         Plotly.newPlot("bubble", plotdata2);
+
+        // build gauge plot
+        var gdata = [
+            {
+                domain: { x: [0, 1], y: [0, 1] },
+                value: demographic.wfreq,
+                title: { text: "Belly Button Washing Frequency" },
+                type: "indicator",
+                gauge: {
+                    bar: { color: "darkblue" }
+                },
+                mode: "gauge+number"
+            }
+        ];
+        
+        var layout = { width: 600, height: 500, margin: { t: 0, b: 0 } };
+
+        Plotly.newPlot('gauge', gdata, layout);
         // build dropdown list
         const menu = d3.select("#selDataset");
     
@@ -171,13 +189,17 @@ function init() {
             y_bar = y_bar.map(el => "OTU "+el)
             console.log(y_bar);
             let demo = data.metadata.filter(meta => meta.id === parseInt(id));    
-            console.log(demo);
+            console.log(demo[0].wfreq);
             // update bubble plot with new id info
             Plotly.restyle('bubble', 'x', [x_bubble2]);
             Plotly.restyle('bubble', 'y', [y_bubble2]);
             // update bar plot with new id info
             Plotly.restyle('bar', 'x', [x_bar.reverse()]);
             Plotly.restyle('bar', 'y', [y_bar.reverse()]);
+            // update guage plot with new id info
+            Plotly.restyle('gauge', 'value', [demo[0].wfreq]);
+            
+
             
             // update demographic info card with new id info
             d3.select("#sample-metadata").selectAll("p").remove();
