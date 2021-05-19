@@ -1,3 +1,5 @@
+// this was original app.js and renamed to test.js since I would have to edit alot.  keeping here to see how i progressed through the coding
+
 d3.json('samples.json').then(data => {
     console.log(data);
     
